@@ -142,6 +142,7 @@ class TicTacToe(discord.ui.View):
                       [2, 5, 8],
                       [0, 4, 8],  # dial
                       [2, 4, 6]]
+        self.edges = [0, 2, 6, 8]
         for x in range(9):
             self.add_item(Button(x, x // 3, self.board[x]))
 
@@ -168,29 +169,47 @@ class TicTacToe(discord.ui.View):
         return count
 
     def dual_fork(self):
+        goal = -1
         for i in range(9):
             count = 0
             temp_board = self.board.copy()
             if temp_board[i] != 0:
-                break
+                continue
             temp_board[i] = self.player
             for pair in self.pairs:
                 s = [self.board[i] for i in pair]
-                if s.count(0) == 1 and sum(s) == self.player * 2:
+                if s.count(0) == 1 and s.count(self.player) == 2:
                     count += 1
             if count >= 2:
-                return i
-        return -1
+                goal = i
+        if goal == -1:
+            for i in range(9):
+                count = 0
+                temp_board = self.board.copy()
+                if temp_board[i] != 0:
+                    continue
+                temp_board[i] = -self.player
+                for pair in self.pairs:
+                    s = [self.board[i] for i in pair]
+                    if s.count(0) == 1 and s.count(-self.player) == 2:
+                        count += 1
+                if count >= 2 and i in self.edges:
+                    goal = i
+        if goal == -1:
+            s = [self.board[i] for i in self.edges]
+            if self.board[4] == -self.player and s.count(-self.player) == s.count(-self.player) == 1:
+                goal = self.edges[s.index(0)]
+        return goal
 
 
     def predict(self, player):  # Don't let this sequence of if statements beat you lol
         for pair in self.pairs:
             s = [self.board[i] for i in pair]
-            if s.count(0) == 1 and sum(s) == player * 2:
+            if s.count(0) == 1 and s.count(self.player) == 2:
                 return pair[s.index(0)]
         for pair in self.pairs:
             s = [self.board[i] for i in pair]
-            if s.count(0) == 1 and sum(s) == -player * 2:
+            if s.count(0) == 1 and s.count(-self.player) == 2:
                 return pair[s.index(0)]
         forking = self.dual_fork()
         if forking != -1:
