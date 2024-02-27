@@ -1,7 +1,5 @@
-# TicTacToe Bot
-## Fully working version of discord TicTacToe bot
+# Fully working version of discord TicTacToe bot
 
--------------
 Modes:
 -------------
 
@@ -18,14 +16,12 @@ Modes:
 ```
 - Or just write:
 ```
-/ttt "Literally everything you wand to write here"
+/ttt Literally everything you wand to write here
 ``` 
 To get info about commands
 
-Using:
 -------------
-
-Download:
+# Download
 
 - Download main.py
 - Install libraries using pip
@@ -40,13 +36,9 @@ pip install typing
 - Run bot and enjoy!
 
 -------------
-Or use existing TicTacToe Bot:
+# Game examples and security features:
 
-- Invite bot to your server using invite link:
-```
-https://discord.com/oauth2/authorize?client_id=1211746607461171270&permissions=10240&scope=applications.commands+bot
-```
- 
+<img height="100%" width="100%" src="https://raw.githubusercontent.com/N1ck6/TicTacToe/main/examples.png"/></p>
 ----------
 # Warning
 
