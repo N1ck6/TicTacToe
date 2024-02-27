@@ -163,9 +163,24 @@ class TicTacToe(discord.ui.View):
         for i in range(9):
             if (i % 3 == x % 3 and i in [x + 3, x - 3]) or (i // 3 == x // 3 and i in [x + 1, x - 1]) or \
                     (i // 3 in [x // 3 - 1, x // 3 + 1] and i in [x - 4, x - 2, x + 2, x + 4]):
-                if self.board[i] != 0:
+                if self.board[i] == -self.player:
                     count += 1
         return count
+
+    def dual_fork(self):
+        for i in range(9):
+            count = 0
+            temp_board = self.board.copy()
+            if temp_board[i] != 0:
+                break
+            temp_board[i] = self.player
+            for pair in self.pairs:
+                s = [self.board[i] for i in pair]
+                if s.count(0) == 1 and sum(s) == self.player * 2:
+                    count += 1
+            if count >= 2:
+                return i
+        return -1
 
 
     def predict(self, player):  # Don't let this sequence of if statements beat you lol
@@ -177,6 +192,9 @@ class TicTacToe(discord.ui.View):
             s = [self.board[i] for i in pair]
             if s.count(0) == 1 and sum(s) == -player * 2:
                 return pair[s.index(0)]
+        forking = self.dual_fork()
+        if forking != -1:
+            return forking
         if self.board[4] == 0:
             return 4
         for i in self.pairs[6:]:
